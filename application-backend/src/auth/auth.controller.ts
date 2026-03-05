@@ -13,9 +13,7 @@ export class AuthController {
     @Post('register')
     @UsePipes(new YupValidationPipe(RegisterSchema))
         async register(@Body() body: RegisterDto) {
-            return {
-            receivedData: body,
-            };
+            return this.authService.register(body);
     }
 
     @Post('login')
