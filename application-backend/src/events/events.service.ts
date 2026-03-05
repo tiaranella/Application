@@ -63,4 +63,22 @@ export class EventsService {
 
         return this.prisma.event.delete({ where: { id } });
     }
+
+    async joinEvent(eventId: number, userId: number) {
+        const event = await this.findOne(eventId);
+        return this.prisma.event.update({
+            where: { id: eventId },
+            data: { participants: { connect: { id: userId } } },
+            include: { _count: { select: { participants: true } } },
+        });
+    }
+
+    async leaveEvent(eventId: number, userId: number) {
+        const event = await this.findOne(eventId);
+        return this.prisma.event.update({
+            where: { id: eventId },
+            data: { participants: { disconnect: { id: userId } } },
+            include: { _count: { select: { participants: true } } },
+        });
+    }
 }

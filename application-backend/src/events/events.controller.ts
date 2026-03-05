@@ -41,4 +41,16 @@ export class EventsController {
     async remove(@Request() req: any, @Param('id') id: string) {
         return this.eventsService.remove(+id, req.user.sub);
     }
+
+    @Post(':id/join')
+    @UseGuards(JwtAuthGuard)
+     async joinEvent(@Request() req: any, @Param('id') id: string) {
+        return this.eventsService.joinEvent(+id, req.user.sub);
+    }
+
+    @Post(':id/leave')
+    @UseGuards(JwtAuthGuard)
+    async leaveEvent(@Request() req: any, @Param('id') id: string) {
+        return this.eventsService.leaveEvent(+id, req.user.sub);
+    }
 }
