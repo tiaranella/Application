@@ -16,7 +16,6 @@ type FormData = yup.InferType<typeof schema>;
 
 export default function Register() {
   const setAuth = useAuthStore((state) => state.setAuth);
-  const [serverError, setServerError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
@@ -44,10 +43,9 @@ export default function Register() {
 
       setAuth(result.access_token, result.user);
 
-      } catch (err: any) {
+      } catch {
           toast.remove();
-          toast.error(err.message);
-          setServerError(err.message);
+          toast.error('');
       } finally {
           setIsLoading(false);
       }

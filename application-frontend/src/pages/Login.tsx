@@ -43,9 +43,9 @@ export default function Login() {
 
       setAuth(result.access_token, result.user);
 
-    } catch (err: any) {
+    } catch {
         toast.remove();
-      toast.error(err.message);
+      toast.error('Could not load events.');
     } finally {
       setIsLoading(false);
     }
