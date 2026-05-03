@@ -10,3 +10,12 @@ input:-webkit-autofill:active{
     -webkit-box-shadow: 0 0 0 30px white inset !important;
     -webkit-text-fill-color: black !important;
 }
+
+.rbc-btn-group button {
+  color: #374151 !important; 
+}
+.rbc-btn-group button.rbc-active {
+  background-color: #1e3a8a !important;
+  color: white !important;
+  border-color: #1e3a8a !important;
+}

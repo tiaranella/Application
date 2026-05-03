@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardLayout from './pages/DashboardLayout';
 import Dashboard from './pages/Dashboard';
+import MyEvents from './pages/MyEvents';
 
 export default function App() {
   const user = useAuthStore((state) => state.user);
@@ -18,7 +19,7 @@ export default function App() {
         
         <Route path="/dashboard" element={user ? <DashboardLayout /> : <Navigate to="/login" />}>
            <Route index element={<Dashboard />} />
-           <Route path="my-events" />
+           <Route path="my-events" element={<MyEvents />} />
         </Route>
         
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
