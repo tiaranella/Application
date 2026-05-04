@@ -17,16 +17,29 @@ export default function Dashboard() {
   const { token } = useAuthStore();
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingId, setLoadingId] = useState<number | null>(null);
+  const [myEventIds, setMyEventIds] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch('http://localhost:8080/events', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await fetch('http://localhost:8080/events');
         if (!response.ok) throw new Error('Failed to fetch events');
         const data = await response.json();
         setEvents(data);
+
+        if (token) {
+          const myRes = await fetch('http://localhost:8080/users/me/events', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          if (myRes.ok) {
+            const myData = await myRes.json();
+            const ids = new Set<number>(myData.map((e: { id: number }) => e.id));
+            setMyEventIds(ids);
+          }
+        }
+
       } catch {
         toast.error('Could not load events.');
       } finally {
@@ -35,6 +48,52 @@ export default function Dashboard() {
     };
     fetchEvents();
   }, [token]);
+
+  const handleToggleEvent = async (eventId: number) => {
+    if (!token) {
+      toast.error("You must be logged in");
+      return;
+    }
+
+    setLoadingId(eventId);
+
+    const isJoined = myEventIds.has(eventId);
+    const endpoint = isJoined ? 'leave' : 'join';
+
+    try {
+      const response = await fetch(`http://localhost:8080/events/${eventId}/${endpoint}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (!response.ok) throw new Error(`Failed to ${endpoint} event`);
+
+      setMyEventIds(prev => {
+        const next = new Set(prev);
+        if (isJoined) 
+          { next.delete(eventId) } 
+        else 
+          { next.add(eventId)};
+        return next;
+      });
+
+      setEvents(prevEvents => prevEvents.map(event => {
+        if (event.id === eventId) {
+          return {
+            ...event,
+            _count: { participants: event._count.participants + (isJoined ? -1 : 1) }
+          };
+        }
+        return event;
+      }));
+
+      toast.success(isJoined ? "You left the event." : "Successfully joined!");
+    } catch {
+      toast.error("Something went wrong, please try again.");
+    } finally {
+      setLoadingId(null);
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -74,7 +133,29 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <button className="w-full py-2.5 bg-[#1e3a8a] hover:bg-[#1e40af] text-white font-bold rounded-xl shadow-sm transition-colors mt-auto">Join Event</button>
+              {(() => {
+                const isJoined = myEventIds.has(event.id);
+                
+                return (
+                  <button 
+                    onClick={() => handleToggleEvent(event.id)}
+                    disabled={loadingId === event.id}
+                    className={`w-full py-2.5 font-bold rounded-xl shadow-sm transition-colors mt-auto disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center h-[44px] ${
+                      isJoined 
+                        ? "bg-red-50 text-red-600 hover:bg-red-100 border border-red-200" 
+                        : "bg-[#1e3a8a] text-white hover:bg-[#1e40af]"
+                    }`}
+                  >
+                    {loadingId === event.id ? (
+                      <span className={`loading loading-spinner loading-sm ${isJoined ? 'text-red-600' : 'text-white'}`}></span>
+                    ) : isJoined ? (
+                      "Leave Event"
+                    ) : (
+                      "Join Event"
+                    )}
+                  </button>
+                );
+              })()}
             </div>
           ))}
         </div>

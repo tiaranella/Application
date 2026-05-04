@@ -46,9 +46,6 @@ export default function MyEvents() {
         
         const rawData: RawEvent[] = await response.json();
 
-        console.log("1. Server Response:", rawData);
-        console.log("2. Total Events Found:", rawData.length);
-
         const formattedEvents = rawData.map(event => {
           const startDate = new Date(event.date);
           
@@ -65,10 +62,7 @@ export default function MyEvents() {
 
         setCalendarEvents(formattedEvents);
 
-      } catch (error) {
-        // ADD THIS CONSOLE.ERROR:
-        console.error("DEBUG - THE FETCH FAILED BECAUSE:", error);
-        
+      } catch {
         toast.error('Could not load your calendar events.');
       } finally {
         setIsLoading(false);
