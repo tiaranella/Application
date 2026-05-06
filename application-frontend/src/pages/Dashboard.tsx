@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
+import { useOutletContext } from 'react-router-dom';
 
 interface Event {
   id: number;
@@ -15,6 +16,7 @@ interface Event {
 
 export default function Dashboard() {
   const { token } = useAuthStore();
+  const { refreshTrigger } = useOutletContext<{ refreshTrigger: number }>();
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingId, setLoadingId] = useState<number | null>(null);
@@ -47,7 +49,7 @@ export default function Dashboard() {
       }
     };
     fetchEvents();
-  }, [token]);
+  }, [token, refreshTrigger]);
 
   const handleToggleEvent = async (eventId: number) => {
     if (!token) {

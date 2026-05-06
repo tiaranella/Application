@@ -6,6 +6,7 @@ import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { enUS } from 'date-fns/locale/en-US';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import CustomWeekView from './CustomWeekView';
+import { useOutletContext } from 'react-router-dom';
 
 const locales = {
   'en-US': enUS,
@@ -29,6 +30,7 @@ interface RawEvent {
 
 export default function MyEvents() {
   const { token } = useAuthStore();
+  const { refreshTrigger } = useOutletContext<{ refreshTrigger: number }>();
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentView, setCurrentView] = useState<'month' | 'week'>('month');
@@ -69,7 +71,7 @@ export default function MyEvents() {
       }
     };
     fetchMyEvents();
-  }, [token]);
+  }, [token, refreshTrigger]);
 
   const eventStyleGetter = () => {
     return {
@@ -88,8 +90,6 @@ export default function MyEvents() {
 
   return (
     <div className="max-w-7xl mx-auto h-full flex flex-col">
-      
-      {/* Page Header */}
       <div className="mb-6 mt-2 flex-shrink-0">
         <h1 className="text-4xl font-display font-extrabold text-black">My Events</h1>
         <p className="text-gray-500 text-lg mt-1 font-medium">View and manage your event calendar</p>

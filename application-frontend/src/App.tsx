@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import DashboardLayout from './pages/DashboardLayout';
 import Dashboard from './pages/Dashboard';
 import MyEvents from './pages/MyEvents';
+// import CreateEvent from './pages/CreateEvent';
 
 export default function App() {
   const user = useAuthStore((state) => state.user);
@@ -21,6 +22,8 @@ export default function App() {
            <Route index element={<Dashboard />} />
            <Route path="my-events" element={<MyEvents />} />
         </Route>
+
+        {/* <Route path="/create-event" element={<CreateEvent />} /> */}
         
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
       </Routes>
