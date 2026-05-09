@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
+import EditEventModal from './EditEventModal';
 
 interface Event {
   id: number;
@@ -15,12 +16,16 @@ interface Event {
 }
 
 export default function Dashboard() {
-  const { token } = useAuthStore();
-  const { refreshTrigger } = useOutletContext<{ refreshTrigger: number }>();
+  const { token, logout, user } = useAuthStore();
+  const context = useOutletContext<{ refreshTrigger?: number}>();
+  const refreshTrigger = context?.refreshTrigger || 0;
+  const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingId, setLoadingId] = useState<number | null>(null);
   const [myEventIds, setMyEventIds] = useState<Set<number>>(new Set());
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [localRefresh, setLocalRefresh] = useState(0);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -34,6 +39,12 @@ export default function Dashboard() {
           const myRes = await fetch('http://localhost:8080/users/me/events', {
             headers: { Authorization: `Bearer ${token}` }
           });
+
+          if (myRes.status === 401) {
+            logout();
+            navigate('/login');
+            return;
+          }
 
           if (myRes.ok) {
             const myData = await myRes.json();
@@ -49,7 +60,7 @@ export default function Dashboard() {
       }
     };
     fetchEvents();
-  }, [token, refreshTrigger]);
+  }, [token, refreshTrigger, localRefresh, logout, navigate]);
 
   const handleToggleEvent = async (eventId: number) => {
     if (!token) {
@@ -136,8 +147,21 @@ export default function Dashboard() {
               </div>
 
               {(() => {
+                const isCreator = user?.id === event.organizer.id;
                 const isJoined = myEventIds.has(event.id);
                 
+                if (isCreator) {
+                  return (
+                    <button 
+                      onClick={() => setEditingEvent(event)} 
+                      className="w-full py-2.5 font-bold rounded-xl shadow-sm transition-colors mt-auto flex justify-center items-center h-[44px] bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                      Edit Event
+                    </button>
+                  );
+                }
+
                 return (
                   <button 
                     onClick={() => handleToggleEvent(event.id)}
@@ -164,7 +188,18 @@ export default function Dashboard() {
       ) : (
         <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
           <h3 className="text-lg font-bold text-gray-700">No events found</h3>
+          <p className="text-gray-500 mt-2">Check back later for new upcoming events.</p>
         </div>
+      )}
+      {editingEvent && (
+        <EditEventModal 
+          event={editingEvent}
+          onClose={() => setEditingEvent(null)}
+          onSuccess={() => {
+            setEditingEvent(null);
+            setLocalRefresh(prev => prev + 1);
+          }}
+        />
       )}
     </div>
   );

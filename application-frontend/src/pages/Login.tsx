@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-// 1. Define the Yup Schema
 const schema = yup.object({
   email: yup.string().email('Please enter a valid email address').required('Email is required'),
   password: yup.string().required('Password is required'),
@@ -46,8 +45,6 @@ export default function Login() {
     } catch {
         toast.remove();
       toast.error('Could not load events.');
-    } finally {
-      setIsLoading(false);
     }
   };
 

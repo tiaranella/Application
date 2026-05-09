@@ -6,7 +6,7 @@ import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { enUS } from 'date-fns/locale/en-US';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import CustomWeekView from './CustomWeekView';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 
 const locales = {
   'en-US': enUS,
@@ -29,7 +29,8 @@ interface RawEvent {
 }
 
 export default function MyEvents() {
-  const { token } = useAuthStore();
+  const { token, logout } = useAuthStore();
+  const navigate = useNavigate();
   const { refreshTrigger } = useOutletContext<{ refreshTrigger: number }>();
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,6 +44,12 @@ export default function MyEvents() {
         const response = await fetch('http://localhost:8080/users/me/events', {
           headers: { Authorization: `Bearer ${token}` }
         });
+
+        if (response.status === 401) {
+          logout();
+          navigate('/login');
+          return;
+        }
         
         if (!response.ok) throw new Error('Failed to fetch events');
         
@@ -71,7 +78,7 @@ export default function MyEvents() {
       }
     };
     fetchMyEvents();
-  }, [token, refreshTrigger]);
+  }, [token, refreshTrigger, logout, navigate]);
 
   const eventStyleGetter = () => {
     return {
