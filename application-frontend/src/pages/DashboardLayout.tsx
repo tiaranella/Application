@@ -42,9 +42,9 @@ export default function DashboardLayout() {
             {isSidebarOpen && <span className="whitespace-nowrap">Public Events</span>}
           </Link>
 
-          <Link to="/dashboard/my-events" 
+          <Link to="/my-events" 
             className={`flex items-center py-3 rounded-xl font-bold transition-all duration-200 
-            ${isActive('/dashboard/my-events')} 
+            ${isActive('/my-events')} 
             ${isSidebarOpen ? 'gap-3 px-4 justify-start' : 'justify-center'}`}>
             <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
             {isSidebarOpen && <span className="whitespace-nowrap">My Events</span>}

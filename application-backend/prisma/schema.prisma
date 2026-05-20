@@ -20,11 +20,11 @@ model User {
 model Event {
   id          Int      @id @default(autoincrement())
   title       String
-  description String?  // Optional short description
-  date        DateTime // Will store both Date & Time
-  location    String   // Required text field
-  capacity    Int?     // Optional: If null, it means unlimited capacity
-  isPublic    Boolean  @default(true) // true = Public, false = Private
+  description String?
+  date        DateTime
+  location    String
+  capacity    Int?
+  isPublic    Boolean  @default(true)
   
   organizerId Int
   organizer   User     @relation("EventOrganizer", fields: [organizerId], references: [id], onDelete: Cascade)

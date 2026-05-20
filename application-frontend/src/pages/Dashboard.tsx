@@ -149,6 +149,7 @@ export default function Dashboard() {
               {(() => {
                 const isCreator = user?.id === event.organizer.id;
                 const isJoined = myEventIds.has(event.id);
+                const isFull = event.capacity !== null && event._count.participants >= event.capacity;
                 
                 if (isCreator) {
                   return (
@@ -162,20 +163,26 @@ export default function Dashboard() {
                   );
                 }
 
+                const isDisabled = loadingId === event.id || (!isJoined && isFull);
+
                 return (
                   <button 
                     onClick={() => handleToggleEvent(event.id)}
-                    disabled={loadingId === event.id}
+                    disabled={isDisabled}
                     className={`w-full py-2.5 font-bold rounded-xl shadow-sm transition-colors mt-auto disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center h-[44px] ${
                       isJoined 
-                        ? "bg-red-50 text-red-600 hover:bg-red-100 border border-red-200" 
-                        : "bg-[#1e3a8a] text-white hover:bg-[#1e40af]"
+                        ? "bg-red-50 text-red-600 hover:bg-red-100 border border-red-200"
+                        : (!isJoined && isFull)
+                          ? "bg-gray-200 text-gray-500"
+                          : "bg-[#1e3a8a] text-white hover:bg-[#1e40af]"
                     }`}
                   >
                     {loadingId === event.id ? (
                       <span className={`loading loading-spinner loading-sm ${isJoined ? 'text-red-600' : 'text-white'}`}></span>
                     ) : isJoined ? (
                       "Leave Event"
+                    ) : isFull ? (
+                      "Event Full"
                     ) : (
                       "Join Event"
                     )}
