@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 
@@ -18,7 +18,7 @@ export class EventsService {
 
     async findAllPublic() {
         return this.prisma.event.findMany({
-            where: { isPublic: true },
+            where: { status: 'APPROVED' },
             include: {
                 organizer: { select: { id: true, name: true } },
                 _count: { select: {participants: true } },
@@ -54,10 +54,12 @@ export class EventsService {
         });
     }
 
-    async remove(id: number, userId: number) {
-        const event = await this.findOne(id);
+    async remove(id: number, userId: number, userRole: string) {
+        const event = await this.prisma.event.findUnique({ where: { id } });
+
+        if (!event) throw new NotFoundException('Event not found');
     
-        if (event.organizerId !== userId) {
+        if (event.organizerId !== userId && userRole !== 'ADMIN') {
             throw new ForbiddenException();
         }
 
@@ -80,5 +82,18 @@ export class EventsService {
             data: { participants: { disconnect: { id: userId } } },
             include: { _count: { select: { participants: true } } },
         });
+    }
+
+    async moderateEvent(id: number, reason: string) {
+        const event = await this.prisma.event.findUnique({ where: { id }});
+        if (!event) throw new NotFoundException('Event not found');
+
+        return this.prisma.event.update({
+            where: { id },
+            data: {
+                status: 'MODERATED',
+                moderationReason: reason,
+            }
+        })
     }
 }

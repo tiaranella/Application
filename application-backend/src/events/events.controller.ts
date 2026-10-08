@@ -4,6 +4,9 @@ import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { YupValidationPipe } from 'src/common/validation.pipe';
 import * as createEventDto from './dto/create-event.dto';
 import * as updateEventDto from './dto/update-event.dto';
+import { string } from 'yup';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 
 @Controller('events')
 export class EventsController {
@@ -39,7 +42,7 @@ export class EventsController {
     @Delete(':id')
     @UseGuards(JwtAuthGuard)
     async remove(@Request() req: any, @Param('id') id: string) {
-        return this.eventsService.remove(+id, req.user.sub);
+        return this.eventsService.remove(+id, req.user.sub, req.user.role);
     }
 
     @Post(':id/join')
@@ -52,5 +55,15 @@ export class EventsController {
     @UseGuards(JwtAuthGuard)
     async leaveEvent(@Request() req: any, @Param('id') id: string) {
         return this.eventsService.leaveEvent(+id, req.user.sub);
+    }
+
+    @Patch(':id/moderate')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('ADMIN')
+    async moderateEvent(
+        @Param('id') id: string,
+        @Body('reason') reason: string
+    ) {
+        return this.eventsService.moderateEvent(+id, reason);
     }
 }
