@@ -37,8 +37,9 @@ export default function CreateEventModal({ onClose, onSuccess }: CreateEventModa
       isPublic: visibility === 'public'
     };
 
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
     try {
-      const response = await fetch('http://localhost:8080/events', {
+      const response = await fetch(`${API_URL}/events`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

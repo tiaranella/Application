@@ -26,17 +26,18 @@ export default function Dashboard() {
   const [myEventIds, setMyEventIds] = useState<Set<number>>(new Set());
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [localRefresh, setLocalRefresh] = useState(0);
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch('http://localhost:8080/events');
+        const response = await fetch(`${API_URL}/events`);
         if (!response.ok) throw new Error('Failed to fetch events');
         const data = await response.json();
         setEvents(data);
 
         if (token) {
-          const myRes = await fetch('http://localhost:8080/users/me/events', {
+          const myRes = await fetch(`${API_URL}/users/me/events`, {
             headers: { Authorization: `Bearer ${token}` }
           });
 
@@ -60,7 +61,7 @@ export default function Dashboard() {
       }
     };
     fetchEvents();
-  }, [token, refreshTrigger, localRefresh, logout, navigate]);
+  }, [token, refreshTrigger, localRefresh, logout, navigate, API_URL]);
 
   const handleToggleEvent = async (eventId: number) => {
     if (!token) {
@@ -74,7 +75,7 @@ export default function Dashboard() {
     const endpoint = isJoined ? 'leave' : 'join';
 
     try {
-      const response = await fetch(`http://localhost:8080/events/${eventId}/${endpoint}`, {
+      const response = await fetch(`${API_URL}/${eventId}/${endpoint}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });

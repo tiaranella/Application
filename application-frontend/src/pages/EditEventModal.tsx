@@ -33,6 +33,8 @@ export default function EditEventModal({ event, onClose, onSuccess }: EditEventM
     const [visibility, setVisibility] = useState('public');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
     const handleEditEvent = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!eventTitle || !description || !date || !time || !location) {
@@ -51,7 +53,7 @@ export default function EditEventModal({ event, onClose, onSuccess }: EditEventM
     };
 
     try {
-        const response = await fetch(`http://localhost:8080/events/${event.id}`, {
+        const response = await fetch(`${API_URL}/events/${event.id}`, {
             method: 'PATCH', 
             headers: {
             'Authorization': `Bearer ${token}`,

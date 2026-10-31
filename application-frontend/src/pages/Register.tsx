@@ -22,11 +22,13 @@ export default function Register() {
     resolver: yupResolver(schema),
   });
 
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
       
     try {
-      const response = await fetch('http://localhost:8080/auth/register', {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -68,7 +70,7 @@ export default function Register() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md space-y-5" autoComplete="off">
           <div className="flex flex-col relative">
-            <div className="absolute top-0 left-0 pl-4 pt-[14px] flex pointer-events-none">
+            <div className="absolute top-0 left-0 pl-4 pt-3.5 flex pointer-events-none">
               <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
               </svg>
@@ -84,7 +86,7 @@ export default function Register() {
           </div>
 
           <div className="flex flex-col relative">
-            <div className="absolute top-0 left-0 pl-4 pt-[14px] flex pointer-events-none">              
+            <div className="absolute top-0 left-0 pl-4 pt-3.5 flex pointer-events-none">              
               <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
@@ -101,7 +103,7 @@ export default function Register() {
           </div>
 
           <div className="flex flex-col relative">
-            <div className="absolute top-0 left-0 pl-4 pt-[14px] flex pointer-events-none">
+            <div className="absolute top-0 left-0 pl-4 pt-3.5 flex pointer-events-none">
               <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
               </svg>
@@ -118,7 +120,7 @@ export default function Register() {
 
           <button 
             type="submit" 
-            className="w-full sm:w-[140px] py-3 px-4 bg-[#1e3a8a] hover:bg-[#4f46e5] text-white font-semibold rounded-lg shadow-md transition-colors disabled:opacity-50 mt-4" 
+            className="w-full sm:w-35 py-3 px-4 bg-[#1e3a8a] hover:bg-[#4f46e5] text-white font-semibold rounded-lg shadow-md transition-colors disabled:opacity-50 mt-4" 
             disabled={isLoading} >
             {isLoading ? 'Signing Up...' : 'Sign Up'}
           </button>
@@ -134,7 +136,7 @@ export default function Register() {
           alt="Event Atmosphere" 
           className="w-full h-full object-cover object-[25%_0%] scale-125 origin-top opacity-90"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-primary/80 via-transparent to-transparent"></div>
         </div>
       </div>
     </div>

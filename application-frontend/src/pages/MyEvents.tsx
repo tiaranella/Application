@@ -36,12 +36,13 @@ export default function MyEvents() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentView, setCurrentView] = useState<'month' | 'week'>('month');
   const [currentDate, setCurrentDate] = useState(new Date());
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
   useEffect(() => {
     if (!token) return;
     const fetchMyEvents = async () => {
       try {
-        const response = await fetch('http://localhost:8080/users/me/events', {
+        const response = await fetch(`${API_URL}/users/me/events`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -78,7 +79,7 @@ export default function MyEvents() {
       }
     };
     fetchMyEvents();
-  }, [token, refreshTrigger, logout, navigate]);
+  }, [token, refreshTrigger, logout, navigate, API_URL]);
 
   const eventStyleGetter = () => {
     return {
