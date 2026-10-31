@@ -21,7 +21,7 @@ export default function CustomWeekView({ date, events }: CustomWeekViewProps) {
             return (
             <div 
                 key={day.toISOString()} 
-                className={`w-48 flex-shrink-0 border rounded-2xl p-4 flex flex-col min-h-[200px] transition-colors
+                className={`w-48 shrink-0 border rounded-2xl p-4 flex flex-col min-h-50 transition-colors
                 ${isSameDay(day, new Date()) ? 'border-[#1e3a8a] bg-blue-50/30' : 'border-gray-200 bg-white'}`}
             >
                 <h3 className="font-display font-bold text-gray-900">{format(day, 'EEE')}</h3>

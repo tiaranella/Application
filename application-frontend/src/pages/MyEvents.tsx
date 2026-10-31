@@ -97,12 +97,12 @@ export default function MyEvents() {
 
   return (
     <div className="max-w-7xl mx-auto h-full flex flex-col">
-      <div className="mb-6 mt-2 flex-shrink-0">
+      <div className="mb-6 mt-2 shrink-0">
         <h1 className="text-4xl font-display font-extrabold text-black">My Events</h1>
         <p className="text-gray-500 text-lg mt-1 font-medium">View and manage your event calendar</p>
       </div>
 
-      <div className="flex-1 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 min-h-[600px]">
+      <div className="flex-1 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 min-h-150">
         {isLoading ? (
           <div className="h-full flex justify-center items-center"><span className="loading loading-spinner text-[#1e3a8a] loading-lg"></span></div>
         ) : (

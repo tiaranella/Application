@@ -123,11 +123,11 @@ export default function EditEventModal({ event, onClose, onSuccess }: EditEventM
             <label className="text-xs font-bold text-gray-700 uppercase tracking-wide">Visibility</label>
             <div className="grid grid-cols-2 gap-3">
               <div onClick={() => setVisibility('public')} className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${visibility === 'public' ? 'bg-blue-50/50 border-blue-200 ring-1 ring-blue-200' : 'bg-gray-50 border-gray-200'}`}>
-                <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${visibility === 'public' ? 'border-[#1e3a8a] bg-[#1e3a8a]' : 'border-gray-300'}`}></div>
+                <div className={`w-4 h-4 rounded-full border-2 shrink-0 ${visibility === 'public' ? 'border-[#1e3a8a] bg-[#1e3a8a]' : 'border-gray-300'}`}></div>
                 <div className="flex-1"><p className="text-sm font-bold text-gray-900 leading-tight">Public</p></div>
               </div>
               <div onClick={() => setVisibility('private')} className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${visibility === 'private' ? 'bg-blue-50/50 border-blue-200 ring-1 ring-blue-200' : 'bg-gray-50 border-gray-200'}`}>
-                <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${visibility === 'private' ? 'border-[#1e3a8a] bg-[#1e3a8a]' : 'border-gray-300'}`}></div>
+                <div className={`w-4 h-4 rounded-full border-2 shrink-0 ${visibility === 'private' ? 'border-[#1e3a8a] bg-[#1e3a8a]' : 'border-gray-300'}`}></div>
                 <div className="flex-1"><p className="text-sm font-bold text-gray-900 leading-tight">Private</p></div>
               </div>
             </div>

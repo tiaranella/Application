@@ -155,7 +155,7 @@ export default function Dashboard() {
                   return (
                     <button 
                       onClick={() => setEditingEvent(event)} 
-                      className="w-full py-2.5 font-bold rounded-xl shadow-sm transition-colors mt-auto flex justify-center items-center h-[44px] bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200"
+                      className="w-full py-2.5 font-bold rounded-xl shadow-sm transition-colors mt-auto flex justify-center items-center h-11 bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200"
                     >
                       <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                       Edit Event
@@ -169,7 +169,7 @@ export default function Dashboard() {
                   <button 
                     onClick={() => handleToggleEvent(event.id)}
                     disabled={isDisabled}
-                    className={`w-full py-2.5 font-bold rounded-xl shadow-sm transition-colors mt-auto disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center h-[44px] ${
+                    className={`w-full py-2.5 font-bold rounded-xl shadow-sm transition-colors mt-auto disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center h-11 ${
                       isJoined 
                         ? "bg-red-50 text-red-600 hover:bg-red-100 border border-red-200"
                         : (!isJoined && isFull)
