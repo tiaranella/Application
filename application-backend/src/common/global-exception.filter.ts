@@ -7,14 +7,14 @@ import { timestamp } from 'rxjs';
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
     catch(exception: any, host: ArgumentsHost) {
+        console.error('Unhandled Exception:', exception);
+
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();
-
         const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
-
         const message = exception instanceof HttpException ? exception.getResponse() : { message: 'Internal server error' };
-
+        
         response.status(status).json({
             statusCode: status,
             timestamp: new Date().toISOString(),
