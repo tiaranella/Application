@@ -75,7 +75,7 @@ export default function Dashboard() {
     const endpoint = isJoined ? 'leave' : 'join';
 
     try {
-      const response = await fetch(`${API_URL}/${eventId}/${endpoint}`, {
+      const response = await fetch(`${API_URL}/events/${eventId}/${endpoint}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });

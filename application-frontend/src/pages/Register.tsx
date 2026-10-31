@@ -47,7 +47,7 @@ export default function Register() {
 
       } catch {
           toast.remove();
-          toast.error('');
+          toast.error('Registration failed. Please try again.')
       } finally {
           setIsLoading(false);
       }
