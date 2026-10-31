@@ -7,7 +7,12 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({ origin: '*' });
+  app.enableCors({ origin: [
+    'https://events-alpha-ten.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:5173',
+  ],
+  credentials: true, });
 
   app.useGlobalFilters(new GlobalExceptionFilter());
 
