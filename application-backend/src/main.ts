@@ -8,9 +8,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({ origin: [
-    'https://events-54pbzfq07-projects.vercel.app',
-    'https://events-54pbzfq07-projects-9a8d.vercel.app',
-    'http://localhost:5173',
+    'http://localhost:5173', 
+    'http://localhost:3000',
+    /\.vercel\.app$/,
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   credentials: true, });
