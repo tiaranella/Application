@@ -8,10 +8,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({ origin: [
-    'https://events-alpha-ten.vercel.app',
-    'http://localhost:3000',
+    'https://events-54pbzfq07-projects.vercel.app',
+    'https://events-54pbzfq07-projects-9a8d.vercel.app',
     'http://localhost:5173',
   ],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   credentials: true, });
 
   app.useGlobalFilters(new GlobalExceptionFilter());
@@ -25,7 +26,7 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document); 
 
-    await app.listen(process.env.PORT ?? 8080, '0.0.0.0');
+    await app.listen(process.env.PORT || 8080);
 }
 
 bootstrap();
